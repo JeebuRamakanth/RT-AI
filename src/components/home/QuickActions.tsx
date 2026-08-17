@@ -6,11 +6,11 @@ import { quickActions } from "@/lib/navigation";
 
 const easing = [0.16, 1, 0.3, 1] as const;
 
-interface RTQuickActionsProps {
+interface QuickActionsProps {
   onAction?: (id: string) => void;
 }
 
-export function RTQuickActions({ onAction }: RTQuickActionsProps) {
+export function QuickActions({ onAction }: QuickActionsProps) {
   return (
     <ul className="flex flex-wrap gap-2">
       {quickActions.map((a, i) => (

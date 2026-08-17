@@ -9,6 +9,8 @@
  */
 
 import type { LanguageStyleMetadata } from "@/ai/language";
+import type { ResponseStylePolicy } from "@/ai/style-policy";
+import type { ConversationIntelligence } from "@/ai/intelligence";
 
 /* ------------------------------------------------------------------ */
 /* Content parts — multimodal-ready, text-first                        */
@@ -51,6 +53,10 @@ export interface AIRequest {
   preferences?: ModelPreferences;
   /** Request-scoped metadata (created timestamp, request id, source). */
   metadata: RequestMetadata;
+  /** Conversation intelligence for the current turn (built by the orchestrator). */
+  intelligence?: ConversationIntelligence;
+  /** The centralized response style policy the generation pipeline consumes. */
+  stylePolicy?: ResponseStylePolicy;
 }
 
 export interface RequestAttachment {

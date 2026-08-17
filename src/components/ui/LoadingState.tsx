@@ -1,11 +1,11 @@
 import { cn } from "@/lib/cn";
 
-interface RTLoadingStateProps {
+interface LoadingStateProps {
   label?: string;
   className?: string;
 }
 
-export function RTLoadingState({ label = "Working", className }: RTLoadingStateProps) {
+export function LoadingState({ label = "Working", className }: LoadingStateProps) {
   return (
     <span
       className={cn("inline-flex items-center gap-2.5 text-pearl-muted", className)}

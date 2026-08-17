@@ -1,18 +1,18 @@
 
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { RTHero } from "@/components/home/RTHero";
-import { RTAIComposer, type RTAIComposerSubmit } from "@/components/home/RTAIComposer";
-import { RTQuickActions } from "@/components/home/RTQuickActions";
-import { RTCapabilityGroups } from "@/components/home/RTCapabilityGroups";
-import { RTRecentWork } from "@/components/home/RTRecentWork";
-import { RTResponseSurface } from "@/components/home/RTResponseSurface";
-import { RTSection } from "@/components/ui/RTSection";
+import { Hero } from "@/components/home/Hero";
+import { Composer, type ComposerSubmit } from "@/components/home/Composer";
+import { QuickActions } from "@/components/home/QuickActions";
+import { CapabilityGroups } from "@/components/home/CapabilityGroups";
+import { RecentWork } from "@/components/home/RecentWork";
+import { ResponseSurface } from "@/components/home/ResponseSurface";
+import { Section } from "@/components/ui/Section";
 import { useConversation } from "@/hooks/useConversation";
 
 const easing = [0.16, 1, 0.3, 1] as const;
 
-export function RTHome() {
+export function Home() {
   const {
     send,
     cancel,
@@ -30,7 +30,7 @@ export function RTHome() {
     status === "completed" ? (lastResponse?.text ?? "") : streamingText;
   const surfaceVisible = (isBusy || status === "completed" || status === "error") && !dismissed;
 
-  function handleSubmit(draft: RTAIComposerSubmit) {
+  function handleSubmit(draft: ComposerSubmit) {
     setDismissed(false);
     void send({
       text: draft.text,
@@ -55,10 +55,10 @@ export function RTHome() {
 
   return (
     <div className="space-y-12">
-      <RTHero />
+      <Hero />
 
       <div className="space-y-3">
-        <RTAIComposer
+        <Composer
           onSubmit={handleSubmit}
           isStreaming={isBusy}
           onCancel={cancel}
@@ -66,7 +66,7 @@ export function RTHome() {
 
         {/* Live assistant response surface — native to the RT AI design. */}
         {surfaceVisible && (
-          <RTResponseSurface
+          <ResponseSurface
             status={status}
             text={surfaceText}
             lastResponse={lastResponse}
@@ -101,34 +101,34 @@ export function RTHome() {
         </AnimatePresence>
       </div>
 
-      <RTSection
+      <Section
         title="Quick actions"
         caption="Jump straight into a capability."
         icon="bolt"
       >
-        <RTQuickActions onAction={handleAction} />
-      </RTSection>
+        <QuickActions onAction={handleAction} />
+      </Section>
 
-      <RTSection
+      <Section
         title="Continue where you left off"
         caption="Recent conversations and projects."
         icon="clock"
       >
-        <RTRecentWork />
-      </RTSection>
+        <RecentWork />
+      </Section>
 
-      <RTSection
+      <Section
         title="What RT AI will become"
         caption="Capability areas the platform is architected to grow into."
         icon="layers"
       >
-        <RTCapabilityGroups />
-      </RTSection>
+        <CapabilityGroups />
+      </Section>
 
       <footer className="pt-8">
         <div className="rt-hairline h-px w-full" />
         <p className="mt-5 text-[12px] text-pearl-faint">
-          RT AI · A private system for Ramakanth. Step 02 — AI Core foundation.
+          RT AI · A private system for Ramakanth. Step 03 — conversation intelligence.
         </p>
       </footer>
     </div>

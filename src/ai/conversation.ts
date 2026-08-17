@@ -3,7 +3,7 @@
  *
  * Owns conversation identity, the ordered message list, streaming state,
  * completion, errors, and cancellation. Conversation orchestration lives
- * here — NOT inside RTAIComposer. The engine is framework-agnostic; the
+ * here — NOT inside Composer. The engine is framework-agnostic; the
  * React hook (useConversation) adapts it to the UI.
  */
 

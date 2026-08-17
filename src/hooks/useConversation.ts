@@ -3,7 +3,7 @@
  * Orchestrator) to the Home UI. Exposes honest lifecycle states, the message
  * list, send/cancel/retry, and the canonical last-assistant response.
  *
- * The hook is the only seam between React and the AI Core. RTAIComposer
+ * The hook is the only seam between React and the AI Core. Composer
  * stays purely presentational + draft-owning; orchestration lives here.
  */
 
@@ -173,7 +173,12 @@ export function useConversation(source = "home-composer"): UseConversation {
       };
 
       try {
-        const response = await core.orchestrator.run(request, onEvent, controller.signal);
+        const response = await core.orchestrator.run(
+          request,
+          onEvent,
+          controller.signal,
+          { history: engine.history() },
+        );
         if (response.state === "cancelled") {
           engine.cancelAssistant(assistantId);
           setStatus("idle");

@@ -1,5 +1,5 @@
 /**
- * RTResponseSurface — the compact assistant response surface that lives inside
+ * ResponseSurface — the compact assistant response surface that lives inside
  * the RT AI Home command center. It renders streaming output, lifecycle
  * states, errors, and cancellation WITHOUT redesigning the Home. It uses the
  * existing "Quiet Futurism" surface system so it feels native to RT AI.
@@ -10,14 +10,14 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { Icon } from "@/components/icons/Icon";
-import { RTButton } from "@/components/ui/RTButton";
+import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/cn";
 import type { AIErrorDescriptor, AIResponse } from "@/ai/types";
 import type { ConversationStatus } from "@/hooks/useConversation";
 
 const easing = [0.16, 1, 0.3, 1] as const;
 
-interface RTResponseSurfaceProps {
+interface ResponseSurfaceProps {
   status: ConversationStatus;
   /** Final text once completed (may equal streamingText on completion). */
   text: string;
@@ -38,7 +38,7 @@ const STATUS_LABEL: Record<ConversationStatus, string> = {
   error: "Error",
 };
 
-export function RTResponseSurface({
+export function ResponseSurface({
   status,
   text,
   lastResponse,
@@ -46,7 +46,7 @@ export function RTResponseSurface({
   isBusy,
   onRetry,
   onDismiss,
-}: RTResponseSurfaceProps) {
+}: ResponseSurfaceProps) {
   const visible = isBusy || status === "completed" || status === "error";
   const label = STATUS_LABEL[status];
   const model = lastResponse?.model;
@@ -120,10 +120,10 @@ export function RTResponseSurface({
                 </p>
                 <div className="flex items-center gap-2">
                   {lastError?.retryable && (
-                    <RTButton variant="secondary" size="sm" onClick={onRetry}>
+                    <Button variant="secondary" size="sm" onClick={onRetry}>
                       <Icon name="retry" size={14} />
                       Retry
-                    </RTButton>
+                    </Button>
                   )}
                   <button
                     type="button"

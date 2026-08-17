@@ -1,13 +1,13 @@
 import { forwardRef, type ButtonHTMLAttributes } from "react";
 import { cn } from "@/lib/cn";
 
-interface RTIconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   label: string;
   active?: boolean;
 }
 
-export const RTIconButton = forwardRef<HTMLButtonElement, RTIconButtonProps>(
-  function RTIconButton({ className, label, active, ...props }, ref) {
+export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
+  function IconButton({ className, label, active, ...props }, ref) {
     return (
       <button
         ref={ref}

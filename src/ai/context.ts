@@ -10,11 +10,14 @@
  * SECURITY: System instructions are authored by RT AI (never user input),
  * and user content / attachment metadata are kept strictly separate from
  * system content. This boundary is extensible for future trusted tool
- * outputs.
+ * outputs. The response style policy's guidance is folded into the
+ * system instructions here — it is RT AI-authored, never user text.
  */
 
 import type { AIRequest, ContentPart } from "@/ai/types";
 import type { LanguageStyleMetadata } from "@/ai/language";
+import { fallbackStylePolicy, type ResponseStylePolicy } from "@/ai/style-policy";
+import type { ConversationIntelligence } from "@/ai/intelligence";
 
 export interface BuiltContext {
   /** RT AI-authored system instructions — never derived from user text. */
@@ -25,6 +28,8 @@ export interface BuiltContext {
   history: ContextTurn[];
   /** Language/style metadata passed through to the provider. */
   language: LanguageStyleMetadata;
+  /** The response style policy consumed by the generation pipeline. */
+  policy: ResponseStylePolicy;
 }
 
 export interface ContextTurn {
@@ -38,17 +43,40 @@ in Hindi, answer in Hindi; in mixed Telugu and English, answer in the same mixed
 Be direct, honest, and useful. Never fabricate capabilities RT AI does not yet have.`;
 
 /**
- * Build the context for a request. Future steps will add memory retrieval,
- * RAG passages, and per-task system instructions — all through this seam.
+ * Build the context for a request. The response style policy supplies the
+ * language/style/continuity guidance appended to the system instructions.
+ * Future steps will add memory retrieval, RAG passages, and per-task
+ * system instructions — all through this seam.
  */
-export function buildContext(request: AIRequest, history: ContextTurn[] = []): BuiltContext {
-  const system = applyLanguageGuidance(DEFAULT_SYSTEM, request.language);
+export function buildContext(
+  request: AIRequest,
+  history: ContextTurn[] = [],
+  policy?: ResponseStylePolicy,
+  intelligence?: ConversationIntelligence,
+): BuiltContext {
+  const guidance = policy?.systemGuidance ?? applyLanguageGuidance(DEFAULT_SYSTEM, request.language);
+  const system = attachIntelligenceContext(DEFAULT_SYSTEM, guidance, intelligence);
   return {
     system,
     user: request.content,
     history,
     language: request.language,
+    policy: policy ?? request.stylePolicy ?? fallbackGuidance(request.language),
   };
+}
+
+/** Fold the policy guidance + conversation intelligence into the base system text. */
+function attachIntelligenceContext(
+  base: string,
+  guidance: string,
+  intelligence?: ConversationIntelligence,
+): string {
+  const parts = [base];
+  if (guidance) parts.push(guidance);
+  if (intelligence?.activeTopic && !intelligence.isContinuation) {
+    parts.push(`The user's current topic is "${intelligence.activeTopic}".`);
+  }
+  return parts.join("\n");
 }
 
 function applyLanguageGuidance(base: string, lang: LanguageStyleMetadata): string {
@@ -79,4 +107,8 @@ export function trimContext(ctx: BuiltContext, charBudget: number): BuiltContext
     used += turn.text.length;
   }
   return { ...ctx, history };
+}
+
+function fallbackGuidance(lang: LanguageStyleMetadata): ResponseStylePolicy {
+  return fallbackStylePolicy(lang);
 }

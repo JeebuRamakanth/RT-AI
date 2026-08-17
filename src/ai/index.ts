@@ -74,11 +74,46 @@ export {
   detectStyle,
   detectLanguageStyle,
   languageLabel,
+  languageName,
+  LANGUAGE_SCRIPTS,
   type LanguageStyleMetadata,
   type LanguageCode,
+  type LanguageScript,
   type Tone,
   type Formality,
   type StyleTag,
+  type Verbosity,
+  type TechnicalLevel,
 } from "@/ai/language";
+
+export {
+  emojiCount,
+  hasEmoji,
+  buildEmojiProfile,
+  preferenceForMessage,
+  applyTastefulEmojis,
+  type EmojiPreference,
+  type EmojiProfile,
+} from "@/ai/emoji";
+
+export {
+  analyzeIntent,
+  extractTopic,
+  buildConversationIntelligence,
+  topicPhrase,
+  intentLabel,
+  type UserIntent,
+  type UserPreferences,
+  type ConversationIntelligence,
+  type IntelligenceTurn,
+} from "@/ai/intelligence";
+
+export {
+  buildStylePolicy,
+  fallbackStylePolicy,
+  type ResponseStylePolicy,
+} from "@/ai/style-policy";
+
+export type { ConversationContext } from "@/ai/orchestrator";
 
 export { getAIConfig, setAIConfig, defaultAIConfig, type AIConfig };

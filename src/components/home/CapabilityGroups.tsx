@@ -53,7 +53,7 @@ function GroupCard({ group, index }: { group: CapabilityGroup; index: number }) 
   );
 }
 
-export function RTCapabilityGroups() {
+export function CapabilityGroups() {
   return (
     <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
       {capabilityGroups.map((g, i) => (

@@ -2,14 +2,14 @@ import type { HTMLAttributes } from "react";
 import { cn } from "@/lib/cn";
 import { Icon, type IconName } from "@/components/icons/Icon";
 
-interface RTSectionProps extends HTMLAttributes<HTMLElement> {
+interface SectionProps extends HTMLAttributes<HTMLElement> {
   title: string;
   caption?: string;
   icon?: IconName;
   action?: React.ReactNode;
 }
 
-export function RTSection({
+export function Section({
   title,
   caption,
   icon,
@@ -17,7 +17,7 @@ export function RTSection({
   className,
   children,
   ...props
-}: RTSectionProps) {
+}: SectionProps) {
   return (
     <section className={cn("relative", className)} {...props}>
       <header className="mb-5 flex items-end justify-between gap-4">

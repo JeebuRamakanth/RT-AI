@@ -1,17 +1,17 @@
 import { motion } from "framer-motion";
 import { Icon } from "@/components/icons/Icon";
-import { RTIconButton } from "@/components/ui/RTIconButton";
+import { IconButton } from "@/components/ui/IconButton";
 import { useTheme } from "@/lib/theme";
 import { cn } from "@/lib/cn";
 
-interface RTHeaderProps {
+interface HeaderProps {
   onOpenNav?: () => void;
   className?: string;
 }
 
 const USER = { name: "Ramakanth", initials: "R" };
 
-export function RTHeader({ onOpenNav, className }: RTHeaderProps) {
+export function Header({ onOpenNav, className }: HeaderProps) {
   const { theme, toggleTheme } = useTheme();
 
   return (
@@ -39,7 +39,7 @@ export function RTHeader({ onOpenNav, className }: RTHeaderProps) {
           <Icon name="menu" size={20} />
         </button>
 
-        {/* Brand is injected by the layout via children slot from RTBrand */}
+        {/* Brand is injected by the layout via children slot from Brand */}
         <div className="flex-1 lg:flex-none">{/* spacer; brand rendered in layout */}</div>
 
         {/* Status / system context */}
@@ -52,13 +52,13 @@ export function RTHeader({ onOpenNav, className }: RTHeaderProps) {
             System ready
           </span>
 
-          <RTIconButton
+          <IconButton
             label={theme === "dark" ? "Switch to light" : "Switch to dark"}
             onClick={toggleTheme}
             className="text-pearl-muted"
           >
             <Icon name={theme === "dark" ? "sun" : "moon"} size={18} />
-          </RTIconButton>
+          </IconButton>
 
           {/* Profile */}
           <button
@@ -78,9 +78,9 @@ export function RTHeader({ onOpenNav, className }: RTHeaderProps) {
 
         {/* Mobile: keep theme toggle + profile compact */}
         <div className="ml-auto flex items-center gap-1 sm:hidden">
-          <RTIconButton label="Toggle theme" onClick={toggleTheme}>
+          <IconButton label="Toggle theme" onClick={toggleTheme}>
             <Icon name={theme === "dark" ? "sun" : "moon"} size={18} />
-          </RTIconButton>
+          </IconButton>
           <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-signal/80 to-signal/40 text-[11px] font-semibold text-ink-950">
             {USER.initials}
           </span>

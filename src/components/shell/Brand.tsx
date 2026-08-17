@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-export function RTBrand() {
+export function Brand() {
   return (
     <Link
       to="/"
