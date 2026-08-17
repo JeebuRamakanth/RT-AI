@@ -6,8 +6,11 @@
  * calls or secrets. It is always clearly marked `development: true` so the
  * UI can never present its output as real production AI.
  *
- * The responses mirror the user's detected language and style, which proves
- * the language/style architecture works end-to-end. Cancellation is honoured
+ * The responses mirror the user's detected language, style, and emoji
+ * register — proving the language/style + emoji intelligence works
+ * end-to-end. When the request carries a response style policy (built by
+ * the orchestrator), the provider reads it to shape greetings, verbosity,
+ * technical framing, and tasteful emoji accents. Cancellation is honoured
  * via the supplied AbortSignal — aborting stops the stream cleanly.
  */
 
@@ -20,6 +23,8 @@ import type {
 } from "@/ai/types";
 import { CancellationError } from "@/ai/errors";
 import { languageLabel } from "@/ai/language";
+import { applyTastefulEmojis, type EmojiPreference } from "@/ai/emoji";
+import type { ConversationIntelligence } from "@/ai/intelligence";
 
 const DEV_PROVIDER_INFO: ProviderInfo = {
   id: "development",
@@ -63,16 +68,18 @@ function delay(ms: number, signal: AbortSignal): Promise<void> {
   });
 }
 
-/** Build a deterministic, language-aware development response body. */
+/** Build a deterministic, language- + style-aware development response body. */
 function composeResponse(request: AIRequest): string {
+  const policy = request.stylePolicy;
+  const intel = request.intelligence;
   const lang = languageLabel(request.language);
-  const isCasual = request.language.formality === "casual";
-  const isFormal = request.language.formality === "formal";
+  const isCasual = (policy?.formality ?? request.language.formality) === "casual";
+  const isFormal = (policy?.formality ?? request.language.formality) === "formal";
 
   const userText = request.message.trim();
   const hasAttachments = request.attachments.length > 0;
 
-  const greeting = pickGreeting(request.language, isCasual, isFormal);
+  const greeting = pickGreeting(request.language, isCasual, isFormal, intel);
   const echo = userText.length > 0 ? userText : "(no message text)";
 
   const lines: string[] = [greeting];
@@ -84,6 +91,25 @@ function composeResponse(request: AIRequest): string {
   );
   lines.push("");
   lines.push(`You said: "${echo}"`);
+
+  if (intel?.activeTopic) {
+    lines.push("");
+    if (intel.isContinuation && intel.continuationTopic) {
+      lines.push(
+        `Conversation continuity: I'm treating this as a follow-up about "${intel.continuationTopic}" (the active topic from your earlier turns).`,
+      );
+    } else {
+      lines.push(`Detected topic: "${intel.activeTopic}".`);
+    }
+  }
+
+  if (intel) {
+    lines.push("");
+    lines.push(
+      `Intent: ${describeIntent(intel.intent)} · Formality: ${policy?.formality ?? request.language.formality} · Tone: ${policy?.tone ?? request.language.tone} · Verbosity: ${policy?.verbosity ?? request.language.verbosity} · Technical level: ${policy?.technicalLevel ?? request.language.technicalLevel}.`,
+    );
+  }
+
   if (hasAttachments) {
     lines.push("");
     lines.push(
@@ -97,17 +123,49 @@ function composeResponse(request: AIRequest): string {
   lines.push(
     "When a real provider is wired through a secure backend, this same stream will carry genuine model output.",
   );
-  return lines.join("\n");
+
+  const raw = lines.join("\n");
+  const emojiPref = (policy?.emojiPreference ?? request.language.emojiPreference) as EmojiPreference;
+  return applyTastefulEmojis(raw, emojiPref);
+}
+
+function describeIntent(intent: ConversationIntelligence["intent"]): string {
+  switch (intent) {
+    case "question":
+      return "question";
+    case "request":
+      return "request";
+    case "explanation":
+      return "explanation";
+    case "task":
+      return "task";
+    case "greeting":
+      return "greeting";
+    case "continuation":
+      return "follow-up";
+    case "translation":
+      return "translation";
+    case "unknown":
+      return "open message";
+  }
 }
 
 function pickGreeting(
   lang: AIRequest["language"],
   isCasual: boolean,
   isFormal: boolean,
+  intel?: ConversationIntelligence,
 ): string {
   const primary = lang.language;
   const secondary = lang.secondaryLanguage;
   const mixed = lang.isMixedLanguage;
+
+  if (intel?.intent === "greeting") {
+    if (mixed && primary === "te" && secondary === "en") return "Namaste — nice to hear from you. 🔥";
+    if (primary === "te") return "Namaskaram 🙏";
+    if (primary === "hi") return "Namaste 🙏";
+    return "Hey — good to see you. 👋";
+  }
 
   if (mixed && primary === "te" && secondary === "en") return "Namaste — let's get into it.";
   if (mixed && primary === "hi" && secondary === "en") return "Namaste — let's get into it.";

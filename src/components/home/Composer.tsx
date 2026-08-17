@@ -43,7 +43,7 @@ const kindIcon: Record<AttachmentKind, "file" | "image" | "film" | "mic"> = {
 };
 
 /**
- * RTAIComposer — the central command input.
+ * Composer — the central command input.
  *
  * Architecture note: This component owns a typed draft state (text +
  * attachments) and exposes a clear `onSubmit` contract, but performs NO
@@ -51,13 +51,13 @@ const kindIcon: Record<AttachmentKind, "file" | "image" | "film" | "mic"> = {
  * future steps connect to real AI/agent services. Until then, submitting
  * surfaces a non-fake "not yet connected" affordance via the parent.
  */
-export interface RTAIComposerSubmit {
+export interface ComposerSubmit {
   text: string;
   attachments: DraftAttachment[];
 }
 
-interface RTAIComposerProps {
-  onSubmit?: (draft: RTAIComposerSubmit) => void;
+interface ComposerProps {
+  onSubmit?: (draft: ComposerSubmit) => void;
   /** True while an assistant turn is in flight; disables submit. */
   isStreaming?: boolean;
   /** Called when the user requests cancellation. */
@@ -65,7 +65,7 @@ interface RTAIComposerProps {
   disabled?: boolean;
 }
 
-export function RTAIComposer({ onSubmit, isStreaming = false, onCancel, disabled }: RTAIComposerProps) {
+export function Composer({ onSubmit, isStreaming = false, onCancel, disabled }: ComposerProps) {
   const [text, setText] = useState("");
   const [attachments, setAttachments] = useState<DraftAttachment[]>([]);
   const [focused, setFocused] = useState(false);

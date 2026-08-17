@@ -1,5 +1,5 @@
-import { RTEmptyState } from "@/components/ui/RTEmptyState";
-import { RTButton } from "@/components/ui/RTButton";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { Button } from "@/components/ui/Button";
 import { Link } from "react-router-dom";
 
 interface ComingSoonProps {
@@ -15,15 +15,15 @@ interface ComingSoonProps {
 export function ComingSoon({ title, icon, description }: ComingSoonProps) {
   return (
     <div className="pt-10">
-      <RTEmptyState
+      <EmptyState
         icon={icon}
         title={`${title} is on the roadmap`}
         message={description}
         action={
           <Link to="/">
-            <RTButton variant="secondary" size="md">
+            <Button variant="secondary" size="md">
               Back to Home
-            </RTButton>
+            </Button>
           </Link>
         }
       />

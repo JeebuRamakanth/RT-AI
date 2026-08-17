@@ -1,5 +1,5 @@
-import { RTHome } from "@/components/home/RTHome";
+import { Home } from "@/components/home/Home";
 
 export function HomePage() {
-  return <RTHome />;
+  return <Home />;
 }

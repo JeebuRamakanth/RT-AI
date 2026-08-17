@@ -9,7 +9,7 @@ import { primaryNav } from "@/lib/navigation";
  * Desktop rail navigation. Lists every future module so the shell is
  * ready for growth. "soon" modules are reachable but clearly marked.
  */
-export function RTNavigation() {
+export function Navigation() {
   const location = useLocation();
 
   return (
@@ -69,7 +69,7 @@ export function RTNavigation() {
 /**
  * Compact navigation for mobile. A slide-down panel triggered from the header.
  */
-export function RTMobileNavigation({ open }: { open: boolean }) {
+export function MobileNavigation({ open }: { open: boolean }) {
   return (
     <AnimatePresence>
       {open && (

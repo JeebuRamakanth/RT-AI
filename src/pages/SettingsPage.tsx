@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useTheme } from "@/lib/theme";
 import { Icon } from "@/components/icons/Icon";
-import { RTPanel } from "@/components/ui/RTPanel";
+import { Panel } from "@/components/ui/Panel";
 import { cn } from "@/lib/cn";
 
 const easing = [0.16, 1, 0.3, 1] as const;
@@ -22,7 +22,7 @@ export function SettingsPage() {
         </p>
       </motion.div>
 
-      <RTPanel className="p-5">
+      <Panel className="p-5">
         <h2 className="text-sm font-medium tracking-wide text-pearl uppercase">
           Appearance
         </h2>
@@ -64,9 +64,9 @@ export function SettingsPage() {
             </button>
           ))}
         </div>
-      </RTPanel>
+      </Panel>
 
-      <RTPanel className="p-5">
+      <Panel className="p-5">
         <h2 className="text-sm font-medium tracking-wide text-pearl uppercase">
           Privacy
         </h2>
@@ -74,7 +74,7 @@ export function SettingsPage() {
           RT AI is private to Ramakanth and his wife. There is no public
           signup, no subscription, and no public-user marketing.
         </p>
-      </RTPanel>
+      </Panel>
     </div>
   );
 }

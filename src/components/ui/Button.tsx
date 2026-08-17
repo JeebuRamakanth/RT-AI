@@ -4,7 +4,7 @@ import { cn } from "@/lib/cn";
 type Variant = "primary" | "secondary" | "ghost";
 type Size = "sm" | "md" | "lg";
 
-interface RTButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: Variant;
   size?: Size;
 }
@@ -24,8 +24,8 @@ const sizes: Record<Size, string> = {
   lg: "h-13 px-7 text-[15px] rounded-[var(--radius-xl)]",
 };
 
-export const RTButton = forwardRef<HTMLButtonElement, RTButtonProps>(
-  function RTButton({ className, variant = "secondary", size = "md", ...props }, ref) {
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+  function Button({ className, variant = "secondary", size = "md", ...props }, ref) {
     return (
       <button
         ref={ref}

@@ -1,11 +1,11 @@
 import type { HTMLAttributes } from "react";
 import { cn } from "@/lib/cn";
 
-interface RTPanelProps extends HTMLAttributes<HTMLDivElement> {
+interface PanelProps extends HTMLAttributes<HTMLDivElement> {
   raised?: boolean;
 }
 
-export function RTPanel({ className, raised, ...props }: RTPanelProps) {
+export function Panel({ className, raised, ...props }: PanelProps) {
   return (
     <div
       className={cn(

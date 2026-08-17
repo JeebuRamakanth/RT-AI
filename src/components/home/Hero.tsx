@@ -13,7 +13,7 @@ function greeting(date: Date): string {
 
 const easing = [0.16, 1, 0.3, 1] as const;
 
-export function RTHero() {
+export function Hero() {
   const greet = useMemo(() => greeting(new Date()), []);
 
   return (

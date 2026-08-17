@@ -2,21 +2,21 @@ import type { HTMLAttributes } from "react";
 import { cn } from "@/lib/cn";
 import { Icon, type IconName } from "@/components/icons/Icon";
 
-interface RTEmptyStateProps extends HTMLAttributes<HTMLDivElement> {
+interface EmptyStateProps extends HTMLAttributes<HTMLDivElement> {
   icon?: IconName;
   title: string;
   message: string;
   action?: React.ReactNode;
 }
 
-export function RTEmptyState({
+export function EmptyState({
   icon = "spark",
   title,
   message,
   action,
   className,
   ...props
-}: RTEmptyStateProps) {
+}: EmptyStateProps) {
   return (
     <div
       className={cn(
