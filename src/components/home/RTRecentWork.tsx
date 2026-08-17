@@ -1,4 +1,3 @@
-"use client";
 
 import { RTEmptyState } from "@/components/ui/RTEmptyState";
 

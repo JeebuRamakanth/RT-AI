@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en" data-theme="dark" suppressHydrationWarning>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#080a10" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta
+      name="description"
+      content="A private, universal AI workspace for Ramakanth."
+    />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <title>RT AI — Your AI System</title>
+
+    <!-- Persisted theme before paint to avoid a flash. Defaults to dark. -->
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem("rt-theme");
+          if (t === "light" || t === "dark") {
+            document.documentElement.setAttribute("data-theme", t);
+          }
+        } catch (e) {}
+      })();
+    </script>
+
+    <!-- Fonts: Instrument Serif (display) + Hanken Grotesk (sans) + Spline Sans Mono (mono) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Spline+Sans+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

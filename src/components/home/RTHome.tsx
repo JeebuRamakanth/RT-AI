@@ -1,4 +1,3 @@
-"use client";
 
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
@@ -7,21 +6,51 @@ import { RTAIComposer, type RTAIComposerSubmit } from "@/components/home/RTAICom
 import { RTQuickActions } from "@/components/home/RTQuickActions";
 import { RTCapabilityGroups } from "@/components/home/RTCapabilityGroups";
 import { RTRecentWork } from "@/components/home/RTRecentWork";
+import { RTResponseSurface } from "@/components/home/RTResponseSurface";
 import { RTSection } from "@/components/ui/RTSection";
+import { useConversation } from "@/hooks/useConversation";
 
 const easing = [0.16, 1, 0.3, 1] as const;
 
 export function RTHome() {
-  const [status, setStatus] = useState<null | { type: "info" }>(null);
+  const {
+    send,
+    cancel,
+    retry,
+    status,
+    streamingText,
+    lastResponse,
+    lastError,
+    isBusy,
+  } = useConversation();
 
-  // Composer contract: the UI is ready, the backend is not connected yet.
-  // We surface a non-fake acknowledgement instead of a fake AI response.
+  // Track whether the response surface should stay after completion/error.
+  const [dismissed, setDismissed] = useState(false);
+  const surfaceText =
+    status === "completed" ? (lastResponse?.text ?? "") : streamingText;
+  const surfaceVisible = (isBusy || status === "completed" || status === "error") && !dismissed;
+
   function handleSubmit(draft: RTAIComposerSubmit) {
-    setStatus({ type: "info" });
+    setDismissed(false);
+    void send({
+      text: draft.text,
+      attachments: draft.attachments.map((a) => ({
+        id: a.id,
+        kind: a.kind,
+        name: a.name,
+        mime: "",
+        size: 0,
+      })),
+    });
   }
 
   function handleAction(_id: string) {
-    setStatus({ type: "info" });
+    // Quick actions remain planned-but-not-fake for non-text capabilities.
+    // Text-style "ask" actions route through the composer intent.
+  }
+
+  function handleDismiss() {
+    setDismissed(true);
   }
 
   return (
@@ -29,11 +58,32 @@ export function RTHome() {
       <RTHero />
 
       <div className="space-y-3">
-        <RTAIComposer onSubmit={handleSubmit} />
+        <RTAIComposer
+          onSubmit={handleSubmit}
+          isStreaming={isBusy}
+          onCancel={cancel}
+        />
 
-        {/* Honest "not connected" affordance — never a fake AI reply */}
+        {/* Live assistant response surface — native to the RT AI design. */}
+        {surfaceVisible && (
+          <RTResponseSurface
+            status={status}
+            text={surfaceText}
+            lastResponse={lastResponse}
+            lastError={lastError}
+            isBusy={isBusy}
+            onRetry={() => {
+              setDismissed(false);
+              void retry();
+            }}
+            onDismiss={handleDismiss}
+          />
+        )}
+
+        {/* Honest "not connected" affordance — shown only before the first
+            real AI interaction, so the user understands the dev provider. */}
         <AnimatePresence>
-          {status?.type === "info" && (
+          {!isBusy && status === "idle" && !lastResponse && !lastError && (
             <motion.div
               initial={{ opacity: 0, y: -6 }}
               animate={{ opacity: 1, y: 0 }}
@@ -43,8 +93,9 @@ export function RTHome() {
               role="status"
             >
               <span className="h-1.5 w-1.5 rounded-full bg-pearl-faint" />
-              RT AI&apos;s core is being wired up. This composer is ready to
-              connect to real AI, agents, and tools in a later step.
+              Live development core ready. Type a message to see the AI
+              pipeline in action — real providers connect through a secure
+              backend in a later step.
             </motion.div>
           )}
         </AnimatePresence>
@@ -77,7 +128,7 @@ export function RTHome() {
       <footer className="pt-8">
         <div className="rt-hairline h-px w-full" />
         <p className="mt-5 text-[12px] text-pearl-faint">
-          RT AI · A private system for Ramakanth. Step 01 — Foundation.
+          RT AI · A private system for Ramakanth. Step 02 — AI Core foundation.
         </p>
       </footer>
     </div>

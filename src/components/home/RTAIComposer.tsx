@@ -1,4 +1,3 @@
-"use client";
 
 import { useId, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -59,10 +58,14 @@ export interface RTAIComposerSubmit {
 
 interface RTAIComposerProps {
   onSubmit?: (draft: RTAIComposerSubmit) => void;
+  /** True while an assistant turn is in flight; disables submit. */
+  isStreaming?: boolean;
+  /** Called when the user requests cancellation. */
+  onCancel?: () => void;
   disabled?: boolean;
 }
 
-export function RTAIComposer({ onSubmit, disabled }: RTAIComposerProps) {
+export function RTAIComposer({ onSubmit, isStreaming = false, onCancel, disabled }: RTAIComposerProps) {
   const [text, setText] = useState("");
   const [attachments, setAttachments] = useState<DraftAttachment[]>([]);
   const [focused, setFocused] = useState(false);
@@ -230,18 +233,18 @@ export function RTAIComposer({ onSubmit, disabled }: RTAIComposerProps) {
 
           <button
             type="button"
-            onClick={handleSubmit}
-            disabled={disabled || (!text.trim() && attachments.length === 0)}
-            aria-label="Send to RT AI"
+            onClick={isStreaming ? onCancel : handleSubmit}
+            disabled={isStreaming ? false : disabled || (!text.trim() && attachments.length === 0)}
+            aria-label={isStreaming ? "Stop" : "Send to RT AI"}
             className={cn(
               "flex h-11 w-11 shrink-0 items-center justify-center rounded-[var(--radius-xl)] transition-all duration-200",
-              "bg-signal text-ink-950 shadow-[0_0_28px_-8px_rgb(var(--signal-glow)/0.7)]",
-              "hover:brightness-110 active:scale-95",
-              "disabled:opacity-40 disabled:shadow-none disabled:hover:brightness-100",
+              isStreaming
+                ? "bg-ink-800 text-pearl hover:bg-ink-700 active:scale-95"
+                : "bg-signal text-ink-950 shadow-[0_0_28px_-8px_rgb(var(--signal-glow)/0.7)] hover:brightness-110 active:scale-95 disabled:opacity-40 disabled:shadow-none disabled:hover:brightness-100",
               "focus-visible:outline-2 focus-visible:outline-offset-2",
             )}
           >
-            <Icon name="send" size={18} />
+            <Icon name={isStreaming ? "stop" : "send"} size={18} />
           </button>
         </div>
 

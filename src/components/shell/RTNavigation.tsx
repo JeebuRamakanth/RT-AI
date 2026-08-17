@@ -1,7 +1,4 @@
-"use client";
-
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { Icon } from "@/components/icons/Icon";
@@ -13,7 +10,7 @@ import { primaryNav } from "@/lib/navigation";
  * ready for growth. "soon" modules are reachable but clearly marked.
  */
 export function RTNavigation() {
-  const pathname = usePathname();
+  const location = useLocation();
 
   return (
     <nav aria-label="Primary" className="flex h-full flex-col">
@@ -21,12 +18,12 @@ export function RTNavigation() {
         {primaryNav.map((item) => {
           const isActive =
             item.href === "/"
-              ? pathname === "/"
-              : pathname.startsWith(item.href);
+              ? location.pathname === "/"
+              : location.pathname.startsWith(item.href);
           return (
             <li key={item.id}>
               <Link
-                href={item.href}
+                to={item.href}
                 aria-current={isActive ? "page" : undefined}
                 className={cn(
                   "group relative flex items-center gap-3 rounded-[var(--radius-md)] px-3 py-2.5",
@@ -88,7 +85,7 @@ export function RTMobileNavigation({ open }: { open: boolean }) {
             {primaryNav.map((item) => (
               <li key={item.id}>
                 <Link
-                  href={item.href}
+                  to={item.href}
                   className="flex items-center gap-2.5 rounded-[var(--radius-md)] px-3 py-2.5 text-pearl-muted hover:bg-ink-800/60 hover:text-pearl"
                 >
                   <Icon name={item.icon} size={17} className="text-pearl-faint" />
