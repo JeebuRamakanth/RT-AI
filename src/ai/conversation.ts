@@ -32,13 +32,22 @@ export class ConversationEngine {
   private streaming = false;
   private currentAssistantId: string | null = null;
   private readonly listeners = new Set<() => void>();
+  /** Cached snapshot — useSyncExternalStore requires a stable reference when
+   * state is unchanged, or it loops infinitely. Rebuilt in emit(). */
+  private snapshot: ConversationState;
 
   constructor(id: string | null = null) {
     this.id = id ?? uid("conv");
+    this.snapshot = { id: this.id, messages: [], streaming: false };
   }
 
   getState(): ConversationState {
-    return { id: this.id, messages: this.messages.slice(), streaming: this.streaming };
+    return this.snapshot;
+  }
+
+  /** The full canonical message history (for persistence + hydration). */
+  allMessages(): ConversationMessage[] {
+    return this.messages.slice();
   }
 
   subscribe(listener: () => void): () => void {
@@ -47,6 +56,11 @@ export class ConversationEngine {
   }
 
   private emit() {
+    this.snapshot = {
+      id: this.id,
+      messages: this.messages.slice(),
+      streaming: this.streaming,
+    };
     for (const l of this.listeners) l();
   }
 

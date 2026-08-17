@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import { AppShell } from "@/components/shell/AppShell";
 import { HomePage } from "@/pages/HomePage";
 import { ChatPage } from "@/pages/ChatPage";
+import { HistoryPage } from "@/pages/HistoryPage";
 import { ResearchPage } from "@/pages/ResearchPage";
 import { CreatePage } from "@/pages/CreatePage";
 import { VisionPage } from "@/pages/VisionPage";
@@ -22,6 +23,8 @@ export function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/chat" element={<ChatPage />} />
+        <Route path="/chat/:conversationId" element={<ChatPage />} />
+        <Route path="/history" element={<HistoryPage />} />
         <Route path="/research" element={<ResearchPage />} />
         <Route path="/create" element={<CreatePage />} />
         <Route path="/vision" element={<VisionPage />} />

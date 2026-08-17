@@ -14,13 +14,17 @@ export default defineConfig({
     port: 12000,
     host: true,
     allowedHosts: [
-      "work-1-jsltvrsigzivgxxl.prod-runtime.all-hands.dev",
-      "work-2-jsltvrsigzivgxxl.prod-runtime.all-hands.dev",
+      "work-1-bjdohatkhpmgkppv.prod-runtime.all-hands.dev",
+      "work-2-bjdohatkhpmgkppv.prod-runtime.all-hands.dev",
     ],
   },
   preview: {
     port: 12000,
     host: true,
+    allowedHosts: [
+      "work-1-bjdohatkhpmgkppv.prod-runtime.all-hands.dev",
+      "work-2-bjdohatkhpmgkppv.prod-runtime.all-hands.dev",
+    ],
   },
   test: {
     environment: "node",

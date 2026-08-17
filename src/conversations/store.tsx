@@ -8,7 +8,7 @@
  * swaps the owner without touching call sites.
  */
 
-import { createContext, useContext, useMemo, useState, type ReactNode } from "react";
+import { createContext, useMemo, useState, type ReactNode } from "react";
 import {
   LocalConversationRepository,
   createDefaultStore,
@@ -59,10 +59,4 @@ export function ConversationStoreProvider({ children }: { children: ReactNode })
   );
 }
 
-export function useConversationStore(): ConversationStoreValue {
-  const ctx = useContext(ConversationStoreContext);
-  if (!ctx) {
-    throw new Error("useConversationStore must be used within ConversationStoreProvider");
-  }
-  return ctx;
-}
+export { ConversationStoreContext, type ConversationStoreValue };

@@ -17,7 +17,8 @@ export interface NavItem {
  */
 export const primaryNav: NavItem[] = [
   { id: "home", label: "Home", href: "/", icon: "home", status: "available" },
-  { id: "chat", label: "Chat", href: "/chat", icon: "spark", status: "soon" },
+  { id: "chat", label: "Chat", href: "/chat", icon: "spark", status: "available" },
+  { id: "history", label: "History", href: "/history", icon: "history", status: "available" },
   { id: "research", label: "Research", href: "/research", icon: "search", status: "soon" },
   { id: "create", label: "Create", href: "/create", icon: "image", status: "soon" },
   { id: "vision", label: "Vision", href: "/vision", icon: "eye", status: "soon" },
@@ -47,7 +48,7 @@ export const capabilityGroups: CapabilityGroup[] = [
     caption: "Reason, search, and orchestrate.",
     icon: "brain",
     items: [
-      { id: "chat", label: "Chat", status: "soon", icon: "spark" },
+      { id: "chat", label: "Chat", status: "available", icon: "spark" },
       { id: "reasoning", label: "Reasoning", status: "soon", icon: "brain" },
       { id: "research", label: "Research", status: "soon", icon: "search" },
       { id: "agents", label: "Agents", status: "soon", icon: "robot" },

@@ -6,7 +6,7 @@
  */
 
 import { useCallback, useEffect, useState } from "react";
-import { useConversationStore } from "@/conversations/store";
+import { useConversationStore } from "@/conversations/useStore";
 import type {
   ConversationRecord,
   SearchResult,

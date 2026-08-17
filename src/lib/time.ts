@@ -37,3 +37,6 @@ export function formatDate(timestamp: number | null | undefined): string {
     minute: "2-digit",
   });
 }
+
+/** Alias for formatRelativeTime, used by list surfaces. */
+export const formatRelative = formatRelativeTime;

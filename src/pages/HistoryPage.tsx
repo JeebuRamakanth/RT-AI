@@ -20,7 +20,7 @@ import { SearchBar } from "@/components/library/SearchBar";
 import { ConversationRow } from "@/components/library/ConversationRow";
 import { useConversationLists } from "@/hooks/useConversationLists";
 import { useLibraryActions } from "@/hooks/useLibraryActions";
-import { useConversationStore } from "@/conversations/store";
+import { useConversationStore } from "@/conversations/useStore";
 import { cn } from "@/lib/cn";
 import type { ConversationBucket } from "@/conversations/types";
 

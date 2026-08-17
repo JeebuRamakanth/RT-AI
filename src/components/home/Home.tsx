@@ -1,5 +1,6 @@
 
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { Hero } from "@/components/home/Hero";
 import { Composer, type ComposerSubmit } from "@/components/home/Composer";
@@ -8,27 +9,31 @@ import { CapabilityGroups } from "@/components/home/CapabilityGroups";
 import { RecentWork } from "@/components/home/RecentWork";
 import { ResponseSurface } from "@/components/home/ResponseSurface";
 import { Section } from "@/components/ui/Section";
-import { useConversation } from "@/hooks/useConversation";
+import { usePersistedConversation } from "@/hooks/usePersistedConversation";
+import type { ConversationStatus } from "@/hooks/useConversation";
 
 const easing = [0.16, 1, 0.3, 1] as const;
 
 export function Home() {
+  const navigate = useNavigate();
   const {
     send,
     cancel,
     retry,
-    status,
+    lifecycle,
     streamingText,
     lastResponse,
     lastError,
     isBusy,
-  } = useConversation();
+    conversationId,
+  } = usePersistedConversation("home-composer");
 
   // Track whether the response surface should stay after completion/error.
   const [dismissed, setDismissed] = useState(false);
+  const status = lifecycle as ConversationStatus;
   const surfaceText =
-    status === "completed" ? (lastResponse?.text ?? "") : streamingText;
-  const surfaceVisible = (isBusy || status === "completed" || status === "error") && !dismissed;
+    lifecycle === "completed" ? (lastResponse?.text ?? "") : streamingText;
+  const surfaceVisible = (isBusy || lifecycle === "completed" || lifecycle === "error") && !dismissed;
 
   function handleSubmit(draft: ComposerSubmit) {
     setDismissed(false);
@@ -44,9 +49,11 @@ export function Home() {
     });
   }
 
+  // When a turn completes and a conversation has been persisted, offer to open
+  // it in the full chat workspace. The Home response surface stays so the
+  // user isn't forced to navigate away.
   function handleAction(_id: string) {
     // Quick actions remain planned-but-not-fake for non-text capabilities.
-    // Text-style "ask" actions route through the composer intent.
   }
 
   function handleDismiss() {
@@ -79,6 +86,30 @@ export function Home() {
             onDismiss={handleDismiss}
           />
         )}
+
+        {/* Continue in the full chat workspace once a conversation persists. */}
+        <AnimatePresence>
+          {!isBusy && lifecycle === "completed" && conversationId && (
+            <motion.div
+              initial={{ opacity: 0, y: -6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.25, ease: easing }}
+              className="flex items-center gap-2 px-1"
+            >
+              <button
+                type="button"
+                onClick={() => navigate(`/chat/${conversationId}`)}
+                className="inline-flex items-center gap-1.5 text-[12.5px] font-medium text-signal transition-colors hover:text-signal-glow focus-visible:outline-2 focus-visible:outline-offset-2"
+              >
+                Continue in Chat
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                  <path d="M5 12h14M13 6l6 6-6 6" />
+                </svg>
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Honest "not connected" affordance — shown only before the first
             real AI interaction, so the user understands the dev provider. */}
@@ -128,7 +159,7 @@ export function Home() {
       <footer className="pt-8">
         <div className="rt-hairline h-px w-full" />
         <p className="mt-5 text-[12px] text-pearl-faint">
-          RT AI · A private system for Ramakanth. Step 03 — conversation intelligence.
+          RT AI · A private system for Ramakanth. Step 04 — persistent conversation library.
         </p>
       </footer>
     </div>

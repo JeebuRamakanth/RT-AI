@@ -6,8 +6,8 @@
 
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { useConversationStore } from "@/conversations/store";
-import { useToast } from "@/components/ui/Toast";
+import { useConversationStore } from "@/conversations/useStore";
+import { useToast } from "@/components/ui/toast-context";
 import type { ConversationActionHandlers } from "@/components/library/ConversationActions";
 
 export function useLibraryActions(): ConversationActionHandlers & {

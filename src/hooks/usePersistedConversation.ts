@@ -24,7 +24,6 @@ import type {
   AIRequest,
   AIResponse,
   ContentPart,
-  ConversationMessage,
   RequestAttachment,
   RequestMetadata,
   StreamEvent,
@@ -36,8 +35,7 @@ import {
   type ConversationRecord,
   type StoredMessage,
 } from "@/conversations";
-import type { ConversationRepository } from "@/conversations/types";
-import { useConversationStore } from "@/conversations/store";
+import { useConversationStore } from "@/conversations/useStore";
 
 export type ConversationLifecycle =
   | "idle"
@@ -134,9 +132,12 @@ export function usePersistedConversation(source = "home"): UsePersistedConversat
   );
 
   // Keep persisted messages in sync with the engine after each completed turn.
+  // Reads directly from the engine (not the React snapshot) so the freshest
+  // messages are persisted even when this closure was captured before the
+  // turn completed — the React-rendered engineState can be stale mid-run.
   const persistEngineMessages = useCallback(
     async (id: string) => {
-      const stored: StoredMessage[] = engineState.messages.map((m) => ({
+      const stored: StoredMessage[] = engine.allMessages().map((m) => ({
         message: m,
         assetReferences: [],
       }));
@@ -145,7 +146,7 @@ export function usePersistedConversation(source = "home"): UsePersistedConversat
       setMessages(stored);
       bump();
     },
-    [engineState.messages, repository, bump],
+    [engine, repository, bump],
   );
 
   const load = useCallback(

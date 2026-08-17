@@ -7,21 +7,16 @@
  * timeout unless an action is hovered/focused.
  */
 
-import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from "react";
+import { useCallback, useMemo, useState, type ReactNode } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Icon } from "@/components/icons/Icon";
+import { ToastContext, type ToastContextValue } from "@/components/ui/toast-context";
 
 interface Toast {
   id: number;
   message: string;
   undo?: () => void;
 }
-
-interface ToastContextValue {
-  notify: (message: string, undo?: () => void) => void;
-}
-
-const ToastContext = createContext<ToastContextValue | null>(null);
 
 let toastSeq = 0;
 
@@ -92,8 +87,3 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   );
 }
 
-export function useToast(): ToastContextValue {
-  const ctx = useContext(ToastContext);
-  if (!ctx) throw new Error("useToast must be used within ToastProvider");
-  return ctx;
-}
