@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import { RTHeader } from "@/components/shell/RTHeader";
 import { RTBrand } from "@/components/shell/RTBrand";

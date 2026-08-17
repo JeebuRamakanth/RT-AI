@@ -1,5 +1,3 @@
-"use client";
-
 import { motion } from "framer-motion";
 import { Icon } from "@/components/icons/Icon";
 import { RTIconButton } from "@/components/ui/RTIconButton";

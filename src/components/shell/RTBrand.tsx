@@ -1,9 +1,9 @@
-import Link from "next/link";
+import { Link } from "react-router-dom";
 
 export function RTBrand() {
   return (
     <Link
-      href="/"
+      to="/"
       className="group inline-flex items-center gap-2.5 rounded-[var(--radius-md)] focus-visible:outline-2 focus-visible:outline-offset-4"
       aria-label="RT AI — home"
     >

@@ -1,5 +1,3 @@
-"use client";
-
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
 
 type Theme = "dark" | "light";
@@ -12,21 +10,25 @@ interface ThemeContextValue {
 
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
+/**
+ * Reads the theme already applied by the pre-paint inline script in
+ * index.html so the provider starts in sync with the rendered document.
+ */
+function readInitialTheme(): Theme {
+  if (typeof document === "undefined") return "dark";
+  const attr = document.documentElement.getAttribute("data-theme");
+  return attr === "light" ? "light" : "dark";
+}
+
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>("dark");
+  const [theme, setThemeState] = useState<Theme>(readInitialTheme);
 
   useEffect(() => {
-    const stored = (typeof window !== "undefined"
-      ? localStorage.getItem("rt-theme")
-      : null) as Theme | null;
-    const initial: Theme = stored === "light" || stored === "dark" ? stored : "dark";
-    setThemeState(initial);
-    document.documentElement.setAttribute("data-theme", initial);
-  }, []);
+    document.documentElement.setAttribute("data-theme", theme);
+  }, [theme]);
 
   const setTheme = useCallback((t: Theme) => {
     setThemeState(t);
-    document.documentElement.setAttribute("data-theme", t);
     try {
       localStorage.setItem("rt-theme", t);
     } catch {
@@ -48,8 +50,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 export function useTheme(): ThemeContextValue {
   const ctx = useContext(ThemeContext);
   if (!ctx) {
-    // Safe fallback so components can render outside provider during SSR.
-    return { theme: "dark", toggleTheme: () => {}, setTheme: () => {} };
+    throw new Error("useTheme must be used within a ThemeProvider");
   }
   return ctx;
 }
