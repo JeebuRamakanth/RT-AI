@@ -160,6 +160,31 @@ export class ConversationEngine {
       .map((m) => ({ role: m.role, text: m.text }));
   }
 
+  /**
+   * Restore a previously persisted canonical message into the engine without
+   * emitting streaming events. Used when hydrating a conversation from the
+   * repository so continuation works across sessions.
+   */
+  hydrate(message: ConversationMessage): void {
+    this.messages.push(message);
+    this.emit();
+  }
+
+  /**
+   * Remove the most recent assistant message (e.g. a failed placeholder) so a
+   * retry can produce a fresh assistant turn. No-op if the last message is a
+   * user turn.
+   */
+  dropLastAssistant(): void {
+    for (let i = this.messages.length - 1; i >= 0; i--) {
+      if (this.messages[i].role === "assistant") {
+        this.messages.splice(i, 1);
+        break;
+      }
+    }
+    this.emit();
+  }
+
   reset(): void {
     this.messages = [];
     this.streaming = false;
