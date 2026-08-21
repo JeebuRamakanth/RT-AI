@@ -47,7 +47,13 @@ export type IconName =
   | "edit"
   | "back"
   | "history"
-  | "users";
+  | "users"
+  | "star"
+  | "star-filled"
+  | "folder"
+  | "upload"
+  | "download"
+  | "tag";
 
 interface IconProps extends SVGProps<SVGSVGElement> {
   name: IconName;
@@ -224,6 +230,39 @@ const paths: Record<IconName, React.ReactNode> = {
     <>
       <circle cx="9" cy="8" r="3.2" />
       <path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M16 6.5a3 3 0 0 1 0 5.6M17 20c0-2.2-.9-4-2.3-5" />
+    </>
+  ),
+  star: (
+    <path d="M12 3.5l2.7 5.5 6 .9-4.3 4.2 1 6-5.4-2.9-5.4 2.9 1-6L3.3 9.9l6-.9L12 3.5z" />
+  ),
+  "star-filled": (
+    <path
+      d="M12 3.5l2.7 5.5 6 .9-4.3 4.2 1 6-5.4-2.9-5.4 2.9 1-6L3.3 9.9l6-.9L12 3.5z"
+      fill="currentColor"
+      stroke="none"
+    />
+  ),
+  folder: (
+    <>
+      <path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z" />
+    </>
+  ),
+  upload: (
+    <>
+      <path d="M12 16V4M6.5 9.5L12 4l5.5 5.5" />
+      <path d="M4 20h16" />
+    </>
+  ),
+  download: (
+    <>
+      <path d="M12 4v12M6.5 10.5L12 16l5.5-5.5" />
+      <path d="M4 20h16" />
+    </>
+  ),
+  tag: (
+    <>
+      <path d="M20.6 13.4L11 3.8A2 2 0 0 0 9.6 3H4a1 1 0 0 0-1 1v5.6a2 2 0 0 0 .8 1.6l9.6 9.6a2 2 0 0 0 2.8 0l4.4-4.4a2 2 0 0 0 0-2.8z" />
+      <circle cx="7.5" cy="7.5" r="1" />
     </>
   ),
 };

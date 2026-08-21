@@ -1,5 +1,6 @@
 
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { Hero } from "@/components/home/Hero";
 import { Composer, type ComposerSubmit } from "@/components/home/Composer";
@@ -8,6 +9,7 @@ import { CapabilityGroups } from "@/components/home/CapabilityGroups";
 import { RecentWork } from "@/components/home/RecentWork";
 import { ResponseSurface } from "@/components/home/ResponseSurface";
 import { Section } from "@/components/ui/Section";
+import { Icon } from "@/components/icons/Icon";
 import { useConversation } from "@/hooks/useConversation";
 
 const easing = [0.16, 1, 0.3, 1] as const;
@@ -113,6 +115,15 @@ export function Home() {
         title="Continue where you left off"
         caption="Recent conversations and projects."
         icon="clock"
+        action={
+          <Link
+            to="/assets"
+            className="inline-flex items-center gap-1.5 rounded-[var(--radius-md)] px-3 py-2 text-[12.5px] font-medium text-pearl-muted transition-colors hover:bg-ink-800/60 hover:text-pearl focus-visible:outline-2 focus-visible:outline-offset-2"
+          >
+            Open Asset Vault
+            <Icon name="arrow-right" size={13} />
+          </Link>
+        }
       >
         <RecentWork />
       </Section>
