@@ -22,7 +22,7 @@ export const primaryNav: NavItem[] = [
   { id: "create", label: "Create", href: "/create", icon: "image", status: "soon" },
   { id: "vision", label: "Vision", href: "/vision", icon: "eye", status: "soon" },
   { id: "voice", label: "Voice", href: "/voice", icon: "mic", status: "soon" },
-  { id: "files", label: "Files", href: "/files", icon: "file", status: "soon" },
+  { id: "assets", label: "Asset Vault", href: "/assets", icon: "folder", status: "available" },
   { id: "coding", label: "Coding", href: "/coding", icon: "code", status: "soon" },
   { id: "tutor", label: "Tutor", href: "/tutor", icon: "book", status: "soon" },
   { id: "agents", label: "Agents", href: "/agents", icon: "robot", status: "soon" },
