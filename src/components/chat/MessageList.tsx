@@ -6,7 +6,7 @@
  */
 
 import { useEffect, useRef } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { Icon } from "@/components/icons/Icon";
 import { cn } from "@/lib/cn";
 import type { ConversationMessage } from "@/ai/types";

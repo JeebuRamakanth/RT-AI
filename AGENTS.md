@@ -61,10 +61,12 @@ A provider-agnostic, streaming-first AI pipeline lives in `src/ai/`. The Home co
 - Provider secrets (API keys) MUST NEVER live in source, localStorage, public files, or `VITE_` env vars. Real providers connect through a secure backend in a later step.
 - Future modules live as pages in `src/pages/<Module>Page.tsx` (registered in `src/App.tsx`) using `<ComingSoon />` until implemented.
 - Preserve the existing shell, tokens, and component contracts when adding features.
+- **External-store snapshot stability**: `ConversationEngine.getState()` is the `useSyncExternalStore` snapshot. It MUST return a cached, referentially stable object between mutations (invalidate only when state actually changes). Returning a fresh object per call caused React error #185 ("Maximum update depth exceeded") and a blank screen app-wide. Never make a `useSyncExternalStore` `getSnapshot` allocate.
+- **Vercel**: `vercel.json` contains the SPA rewrite (`/(.*) -> /index.html`) required for `BrowserRouter` deep links. Keep it.
 
 ## Commands
 - `npm run dev` (Vite dev server, port 12000) / `npm run build` (tsc + vite build) / `npm run preview` (serve dist) / `npm run lint` / `npm run typecheck` / `npm test` / `npm run test:watch`
-- Build + typecheck + lint + tests (87) all pass clean as of Step 03.
+- Build + typecheck + lint + tests (87) all pass clean as of the React #185 hotfix (post-Step 04).
 
 ## Security note
 `react-router-dom@6.30.4` carries two npm advisories: (1) open redirect via backslash in `<Link>`/`useNavigate`, and (2) `deserializeErrors()` SSR hydration injection. Neither applies here — all routes are internal config (no user-supplied redirect targets) and this is a pure client-side Vite SPA with no SSR/hydration path. A breaking upgrade to react-router v7 can be done in a dedicated later step if desired.
