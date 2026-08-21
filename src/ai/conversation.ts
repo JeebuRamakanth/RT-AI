@@ -32,13 +32,26 @@ export class ConversationEngine {
   private streaming = false;
   private currentAssistantId: string | null = null;
   private readonly listeners = new Set<() => void>();
+  /**
+   * Cached snapshot for useSyncExternalStore consumers. getState() MUST be
+   * referentially stable between store mutations — a fresh object per call
+   * makes React's snapshot consistency check loop forever (error #185).
+   */
+  private snapshot: ConversationState | null = null;
 
   constructor(id: string | null = null) {
     this.id = id ?? uid("conv");
   }
 
   getState(): ConversationState {
-    return { id: this.id, messages: this.messages.slice(), streaming: this.streaming };
+    if (this.snapshot === null) {
+      this.snapshot = {
+        id: this.id,
+        messages: this.messages.slice(),
+        streaming: this.streaming,
+      };
+    }
+    return this.snapshot;
   }
 
   subscribe(listener: () => void): () => void {
@@ -47,6 +60,7 @@ export class ConversationEngine {
   }
 
   private emit() {
+    this.snapshot = null;
     for (const l of this.listeners) l();
   }
 
@@ -61,6 +75,7 @@ export class ConversationEngine {
       finishedAt: Date.now(),
     };
     this.messages.push(msg);
+    this.snapshot = null;
     return msg.id;
   }
 

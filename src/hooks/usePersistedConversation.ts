@@ -24,7 +24,6 @@ import type {
   AIRequest,
   AIResponse,
   ContentPart,
-  ConversationMessage,
   RequestAttachment,
   RequestMetadata,
   StreamEvent,
@@ -36,7 +35,6 @@ import {
   type ConversationRecord,
   type StoredMessage,
 } from "@/conversations";
-import type { ConversationRepository } from "@/conversations/types";
 import { useConversationStore } from "@/conversations/store";
 
 export type ConversationLifecycle =
